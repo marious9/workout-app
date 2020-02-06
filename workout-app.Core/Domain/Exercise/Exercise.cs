@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace workout_app.Core.Model
+namespace workout_app.Core.Domain
 {
     public class Exercise
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string VideoLink { get; set; }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace workout_app.Core.Model
+namespace workout_app.Core.Domain
 {
     public enum Category
     {
