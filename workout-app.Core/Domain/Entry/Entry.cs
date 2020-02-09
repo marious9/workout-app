@@ -9,5 +9,6 @@ namespace workout_app.Core.Domain
         public int Id { get; }
         public int Reps { get; set; }
         public double Weight { get; set; }
+        public Exercise Exercise { get; set; }
     }
 }
