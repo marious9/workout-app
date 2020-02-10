@@ -7,14 +7,13 @@ using workout_app.Core.Domain;
 
 namespace workout_app.Data.Configuration
 {
-    public class SessionEntityConfiguration : IEntityTypeConfiguration<Session>
+    public class SubcategoryEntityConfiguration : IEntityTypeConfiguration<Subcategory>
     {
-        public void Configure(EntityTypeBuilder<Session> builder)
+        public void Configure(EntityTypeBuilder<Subcategory> builder)
         {
             builder.HasKey(s => s.Id);
-            builder.Property(s => s.DateTime).IsRequired();
-            builder.HasMany(s => s.Trainings)
-                   .WithOne(t => t.Session);
+            builder.HasOne(s => s.Exercise).WithMany(e => e.Subcategories);
+            builder.Property(e => e.Category).HasConversion<string>();
         }
     }
 }

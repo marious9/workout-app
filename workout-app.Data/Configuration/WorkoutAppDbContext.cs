@@ -13,6 +13,7 @@ namespace workout_app.Data.Configuration
         public DbSet<Entry> Entries { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Training> Trainings { get; set; }
+        public DbSet<Subcategory> Subcategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +21,7 @@ namespace workout_app.Data.Configuration
             modelBuilder.ApplyConfiguration(new EntryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SessionEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TrainingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubcategoryEntityConfiguration());
         }
 
     }

@@ -9,5 +9,6 @@ namespace workout_app.Core.Domain
         public int Id { get; }
         public string Description { get; set; }
         public ICollection<Exercise> Exercises { get; set; }
+        public Session Session { get; set; }
     }
 }
