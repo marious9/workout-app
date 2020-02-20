@@ -23,4 +23,8 @@
     <ProjectReference Include="..\workout-app.Core\workout-app.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RequestsDto\" />
+  </ItemGroup>
+
 </Project>

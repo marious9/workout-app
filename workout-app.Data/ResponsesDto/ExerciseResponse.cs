@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace workout_app.Core.Interfaces
+namespace workout_app.Data.ResponsesDto
 {
-    public interface IEntryRepository
+    class ExerciseResponse
     {
     }
 }
