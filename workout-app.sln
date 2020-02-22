@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workout-app.Core", "workout-app.Core\workout-app.Core.csproj", "{0B2B83D0-C0F1-403E-BDA8-BA312407EDF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workout-app.Data", "workout-app.Data\workout-app.Data.csproj", "{27FEDC45-3954-49F6-A9B5-ED478829C9BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workout-app.Infrastructure", "workout-app.Data\workout-app.Infrastructure.csproj", "{27FEDC45-3954-49F6-A9B5-ED478829C9BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workout-app.Api", "workout-app.Api\workout-app.Api.csproj", "{449CD8A3-967C-4FF3-8FE2-493628714494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "workout-app.Application", "workout-app.Application\workout-app.Application.csproj", "{9F72DFF5-A133-4CD0-86BE-7938499E6DE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workout-app.Application", "workout-app.Application\workout-app.Application.csproj", "{9F72DFF5-A133-4CD0-86BE-7938499E6DE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

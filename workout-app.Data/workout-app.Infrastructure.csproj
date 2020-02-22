@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="RequestsDto\**" />
+    <EmbeddedResource Remove="RequestsDto\**" />
+    <None Remove="RequestsDto\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
@@ -21,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\workout-app.Core\workout-app.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="RequestsDto\" />
   </ItemGroup>
 
 </Project>

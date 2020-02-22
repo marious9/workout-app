@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MediatR" Version="8.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\workout-app.Core\workout-app.Core.csproj" />
-    <ProjectReference Include="..\workout-app.Data\workout-app.Data.csproj" />
+    <ProjectReference Include="..\workout-app.Data\workout-app.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using workout_app.Data.Configuration;
+using workout_app.Infrastructure.Configuration;
 
-namespace workout_app.Data.Migrations
+namespace workout_app.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkoutAppDbContext))]
     partial class WorkoutAppDbContextModelSnapshot : ModelSnapshot
