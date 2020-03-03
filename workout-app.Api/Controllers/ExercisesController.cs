@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using workout_app.Application.Commands;
 using workout_app.Application.Queries;
+using workout_app.Infrastructure.Configuration;
 
 namespace workout_app.Api.Controllers
 {
@@ -15,10 +16,12 @@ namespace workout_app.Api.Controllers
     public class ExercisesController : ControllerBase
     {      
         private readonly IMediator _mediator;
+        private readonly WorkoutAppDbContext _dbContext;
 
-        public ExercisesController(IMediator mediator)
+        public ExercisesController(IMediator mediator, WorkoutAppDbContext dbContext)
         {
             _mediator = mediator;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
