@@ -1,5 +1,7 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +14,7 @@ namespace workout_app.Application.Commands
 {
     public static class CreateExercise
     {
-        public class CreateExerciseCommand : IRequest<Exercise>
+        public class CreateExerciseCommand : IRequest<int>
         {
             public string Name { get; set; }
             public string Description { get; set; }
@@ -21,15 +23,16 @@ namespace workout_app.Application.Commands
             public ICollection<string> Subcategories { get; set; }
         }
 
-        public class CreateExerciseHandler : IRequestHandler<CreateExerciseCommand, Exercise>
+        public class CreateExerciseHandler : IRequestHandler<CreateExerciseCommand, int>
         {
             private readonly WorkoutAppDbContext _dbContext;
 
             public CreateExerciseHandler(WorkoutAppDbContext dbContext)
             {
                 _dbContext = dbContext;
+
             }
-            public async Task<Exercise> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
+            public async Task<int> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
             {
                 var exercise = new Exercise
                 {
@@ -44,14 +47,17 @@ namespace workout_app.Application.Commands
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return createdExercise.Entity;
+                return createdExercise.Entity.Id;
             }
         }
 
         public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCommand>
         {
-            public CreateExerciseCommandValidator()
+            private readonly WorkoutAppDbContext _dbContext;
+            public CreateExerciseCommandValidator(WorkoutAppDbContext dbContext)
             {
+                _dbContext = dbContext;
+
                 RuleFor(x => x.Description)
                     .MaximumLength(500);
 
@@ -62,7 +68,18 @@ namespace workout_app.Application.Commands
                 RuleFor(x => x.Category)
                     .IsEnumName(typeof(Category))
                     .NotEmpty();
+
+                RuleFor(x => x.Name)
+                    .MustAsync(CheckIfExerciseExists)
+                    .WithMessage("Exercise with this name already exists");
             }
+
+            private async Task<bool> CheckIfExerciseExists(string name, CancellationToken cancellationToken)
+            {
+                return !(await _dbContext.Exercises.AnyAsync(x => x.Name == name, cancellationToken));
+            }
+
+
         }
     }
 }

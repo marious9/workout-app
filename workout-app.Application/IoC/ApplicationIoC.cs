@@ -7,6 +7,7 @@ using workout_app.Application.PipelineBehaviours;
 using MediatR.Pipeline;
 using workout_app.Application.Queries;
 using workout_app.Application.Commands;
+using FluentValidation;
 
 public class ApplicationIoC : Module
 {
@@ -32,7 +33,7 @@ public class ApplicationIoC : Module
         builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
 
         builder.RegisterType<GetAllExercises.GetAllExercisesHandler>().AsImplementedInterfaces().InstancePerDependency();
-        builder.RegisterType<CreateExercise.CreateExerciseCommand>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<CreateExercise.CreateExerciseHandler>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 
@@ -43,7 +44,11 @@ public class ApplicationIoC : Module
             return t => c.Resolve(t);
         });
 
-        builder.RegisterTypes(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        builder.RegisterAssemblyTypes(ThisAssembly)
+            .Where(t => t.IsClosedTypeOf(typeof(AbstractValidator<>)))
+            .AsImplementedInterfaces();
+
+        builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 
         base.Load(builder);
     }

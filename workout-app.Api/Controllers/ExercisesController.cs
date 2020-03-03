@@ -34,8 +34,7 @@ namespace workout_app.Api.Controllers
         public async Task<IActionResult> CreateExercise([FromBody] CreateExercise.CreateExerciseCommand command)
         {
             var result = await _mediator.Send(command);
-            return CreatedAtAction("CreateExercise", new { id = result.Id });
-
+            return CreatedAtAction("CreateExercise", new { id = result });
         }
 
     }
