@@ -16,24 +16,22 @@ namespace workout_app.Api.Controllers
     public class ExercisesController : ControllerBase
     {      
         private readonly IMediator _mediator;
-        private readonly WorkoutAppDbContext _dbContext;
 
-        public ExercisesController(IMediator mediator, WorkoutAppDbContext dbContext)
+        public ExercisesController(IMediator mediator)
         {
             _mediator = mediator;
-            _dbContext = dbContext;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllExercises()
         {
-            var query = new GetAllExercisesQuery();
+            var query = new GetAllExercises.GetAllExercisesQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateExercise([FromBody] CreateExerciseCommand command)
+        public async Task<IActionResult> CreateExercise([FromBody] CreateExercise.CreateExerciseCommand command)
         {
             var result = await _mediator.Send(command);
             return CreatedAtAction("CreateExercise", new { id = result.Id });

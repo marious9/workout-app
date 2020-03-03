@@ -4,8 +4,9 @@ using AutoMapper;
 using Autofac;
 using MediatR;
 using workout_app.Application.PipelineBehaviours;
-using workout_app.Application.Handlers;
 using MediatR.Pipeline;
+using workout_app.Application.Queries;
+using workout_app.Application.Commands;
 
 public class ApplicationIoC : Module
 {
@@ -28,11 +29,10 @@ public class ApplicationIoC : Module
             .As<IMapper>()
             .InstancePerLifetimeScope();
 
-        //services.AddValidatorsFromAssembly(typeof(CreateExerciseCommandValidator).Assembly);
         builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
 
-        builder.RegisterType<GetAllExercisesHandler>().AsImplementedInterfaces().InstancePerDependency();
-        builder.RegisterType<CreateExerciseHandler>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<GetAllExercises.GetAllExercisesHandler>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<CreateExercise.CreateExerciseCommand>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 
