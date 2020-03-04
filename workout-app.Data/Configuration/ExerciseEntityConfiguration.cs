@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 using workout_app.Core.Domain;
 
-namespace workout_app.Data.Configuration
+namespace workout_app.Infrastructure.Configuration
 {
     public class ExerciseEntityConfiguration : IEntityTypeConfiguration<Exercise>
     {

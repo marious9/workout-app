@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workout_app.Core.Domain;
 
-namespace workout_app.Data.Configuration
+namespace workout_app.Infrastructure.Configuration
 {
     public class WorkoutAppDbContext : DbContext
     {

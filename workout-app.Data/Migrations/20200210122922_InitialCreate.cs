@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace workout_app.Data.Migrations
+namespace workout_app.Infrastructure.Migrations
 {
     public partial class InitialCreate : Migration
     {
