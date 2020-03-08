@@ -1,4 +1,6 @@
 using Autofac;
+using FluentValidation;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using workout_app.Api.Helpers;
+using workout_app.Core.Domain.Helpers;
 using workout_app.Data.IoC;
 
 namespace workout_app.Api
@@ -32,6 +35,16 @@ namespace workout_app.Api
                 builder.AllowCredentials();
             }));
 
+            //services.ConfigureOptions<ProblemDetailsOptionsCustomSetup>();
+
+            services.AddProblemDetails(x =>
+            {
+                x.Map<ValidationException>(ex => new ValidationExceptionProblemDetails(ex));
+                x.Map<BusinessRuleValidationException>(ex => new BusinessRuleValidationExceptionProblemDetails(ex));
+                x.Map<NotFoundRuleValidationException>(ex => new NotFoundRuleValidationExceptionProblemDetails(ex));
+            });
+             
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -49,10 +62,9 @@ namespace workout_app.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseProblemDetails();
             }
-
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseSwagger();
 

@@ -30,6 +30,14 @@ namespace workout_app.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{exerciseId}")]
+        public async Task<IActionResult> GetExerciseById(int exerciseId)
+        {
+            var query = new GetExerciseById.GetExerciseByIdQuery(exerciseId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateExercise([FromBody] CreateExercise.CreateExerciseCommand command)
         {

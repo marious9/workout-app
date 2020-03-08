@@ -34,6 +34,7 @@ public class ApplicationIoC : Module
 
         builder.RegisterType<GetAllExercises.GetAllExercisesHandler>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterType<CreateExercise.CreateExerciseHandler>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<GetExerciseById.GetExerciseByIdHandler>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 

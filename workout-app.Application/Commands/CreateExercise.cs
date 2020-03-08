@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using workout_app.Core.Domain;
+using workout_app.Core.Domain.Helpers;
 using workout_app.Infrastructure.Configuration;
 
 namespace workout_app.Application.Commands
@@ -34,6 +35,11 @@ namespace workout_app.Application.Commands
             }
             public async Task<int> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
             {
+                bool exerciseAlreadyExists = !(await _dbContext.Exercises.AnyAsync(x => x.Name == request.Name, cancellationToken));
+
+                if (exerciseAlreadyExists)
+                    throw new BusinessRuleValidationException("Exercise with this name already exists");
+
                 var exercise = new Exercise
                 {
                     Name = request.Name,
@@ -41,7 +47,7 @@ namespace workout_app.Application.Commands
                     VideoLink = request.VideoLink,
                     Category = (Category)Enum.Parse(typeof(Category), request.Category)
                     //@TODO Add subcategories
-                };
+                };                
 
                 var createdExercise = await _dbContext.Exercises.AddAsync(exercise, cancellationToken);
 
@@ -53,11 +59,8 @@ namespace workout_app.Application.Commands
 
         public class CreateExerciseCommandValidator : AbstractValidator<CreateExerciseCommand>
         {
-            private readonly WorkoutAppDbContext _dbContext;
-            public CreateExerciseCommandValidator(WorkoutAppDbContext dbContext)
+            public CreateExerciseCommandValidator()
             {
-                _dbContext = dbContext;
-
                 RuleFor(x => x.Description)
                     .MaximumLength(500);
 
@@ -68,18 +71,7 @@ namespace workout_app.Application.Commands
                 RuleFor(x => x.Category)
                     .IsEnumName(typeof(Category))
                     .NotEmpty();
-
-                RuleFor(x => x.Name)
-                    .MustAsync(CheckIfExerciseExists)
-                    .WithMessage("Exercise with this name already exists");
             }
-
-            private async Task<bool> CheckIfExerciseExists(string name, CancellationToken cancellationToken)
-            {
-                return !(await _dbContext.Exercises.AnyAsync(x => x.Name == name, cancellationToken));
-            }
-
-
         }
     }
 }
