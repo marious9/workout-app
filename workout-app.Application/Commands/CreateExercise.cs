@@ -35,7 +35,7 @@ namespace workout_app.Application.Commands
             }
             public async Task<int> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
             {
-                bool exerciseAlreadyExists = !(await _dbContext.Exercises.AnyAsync(x => x.Name == request.Name, cancellationToken));
+                bool exerciseAlreadyExists = await _dbContext.Exercises.AnyAsync(x => x.Name == request.Name, cancellationToken);
 
                 if (exerciseAlreadyExists)
                     throw new BusinessRuleValidationException("Exercise with this name already exists");
