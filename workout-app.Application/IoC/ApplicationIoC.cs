@@ -8,8 +8,9 @@ using MediatR.Pipeline;
 using workout_app.Application.Queries;
 using workout_app.Application.Commands;
 using FluentValidation;
+using System.Reflection;
 
-public class ApplicationIoC : Module
+public class ApplicationIoC : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
@@ -32,9 +33,7 @@ public class ApplicationIoC : Module
 
         builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
 
-        builder.RegisterType<GetAllExercises.GetAllExercisesHandler>().AsImplementedInterfaces().InstancePerDependency();
-        builder.RegisterType<CreateExercise.CreateExerciseHandler>().AsImplementedInterfaces().InstancePerDependency();
-        builder.RegisterType<GetExerciseById.GetExerciseByIdHandler>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterAssemblyTypes(typeof(ApplicationIoC).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
 
