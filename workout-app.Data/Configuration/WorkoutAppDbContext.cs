@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using workout_app.Core.Domain;
+using workout_app.Core.Domain.User;
+using workout_app.Data.Configuration;
 
 namespace workout_app.Infrastructure.Configuration
 {
@@ -14,6 +16,7 @@ namespace workout_app.Infrastructure.Configuration
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +25,7 @@ namespace workout_app.Infrastructure.Configuration
             modelBuilder.ApplyConfiguration(new SessionEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TrainingEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubcategoryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         }
 
     }

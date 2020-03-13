@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workout_app.Infrastructure.Configuration;
 
 namespace workout_app.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkoutAppDbContext))]
-    partial class WorkoutAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200313203740_AddedUser")]
+    partial class AddedUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,16 +144,10 @@ namespace workout_app.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
+                    b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

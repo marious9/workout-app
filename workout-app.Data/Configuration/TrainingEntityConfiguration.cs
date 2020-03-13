@@ -12,8 +12,12 @@ namespace workout_app.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Training> builder)
         {
             builder.HasKey(t => t.Id);
+
             builder.HasMany(t => t.Exercises)
                    .WithOne(t => t.Training);
+
+            builder.HasOne(t => t.User)
+                   .WithMany(t => t.Trainings);
         }
 }
 }

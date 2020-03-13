@@ -1,12 +1,18 @@
 using Autofac;
 using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using workout_app.Api.Helpers;
 using workout_app.Core.Domain.Helpers;
 using workout_app.Data.IoC;
@@ -35,8 +41,6 @@ namespace workout_app.Api
                 builder.AllowCredentials();
             }));
 
-            //services.ConfigureOptions<ProblemDetailsOptionsCustomSetup>();
-
             services.AddProblemDetails(x =>
             {
                 x.Map<ValidationException>(ex => new ValidationExceptionProblemDetails(ex));
@@ -49,6 +53,36 @@ namespace workout_app.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Authentication:App").ToString());
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services
+                .AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        _configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -77,6 +111,8 @@ namespace workout_app.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

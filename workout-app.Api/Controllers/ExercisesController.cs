@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using workout_app.Application.Commands;
@@ -22,6 +23,7 @@ namespace workout_app.Api.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllExercises()
         {
