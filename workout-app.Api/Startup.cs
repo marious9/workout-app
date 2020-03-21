@@ -71,18 +71,15 @@ namespace workout_app.Api
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+            })
+            .AddGoogle(x =>
+            {
+                IConfigurationSection googleAuthNSection =
+                    _configuration.GetSection("Authentication:Google");
+
+                x.ClientId = googleAuthNSection["ClientId"];
+                x.ClientSecret = googleAuthNSection["ClientSecret"];
             });
-
-            services
-                .AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    IConfigurationSection googleAuthNSection =
-                        _configuration.GetSection("Authentication:Google");
-
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
-                });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

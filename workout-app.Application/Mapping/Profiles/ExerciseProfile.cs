@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using workout_app.Application.Mapping.Dto.Exercise;
 using workout_app.Core.Domain;
 

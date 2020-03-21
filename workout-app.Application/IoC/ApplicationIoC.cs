@@ -9,6 +9,8 @@ using workout_app.Application.Queries;
 using workout_app.Application.Commands;
 using FluentValidation;
 using System.Reflection;
+using Google.Apis.Auth.OAuth2.Flows;
+using workout_app.Application.Services;
 
 public class ApplicationIoC : Autofac.Module
 {
@@ -32,6 +34,7 @@ public class ApplicationIoC : Autofac.Module
             .InstancePerLifetimeScope();
 
         builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
+        builder.RegisterType<GoogleAuthService>().As<IGoogleAuthService>().InstancePerLifetimeScope();
 
         builder.RegisterAssemblyTypes(typeof(ApplicationIoC).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
         builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
