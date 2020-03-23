@@ -3,13 +3,16 @@ using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using workout_app.Api.Helpers;
 using workout_app.Core.Domain.Helpers;
+using workout_app.Core.Domain.User;
 using workout_app.Data.IoC;
+using workout_app.Infrastructure.Configuration;
 
 namespace workout_app.Api
 {
@@ -43,7 +46,22 @@ namespace workout_app.Api
                 x.Map<BusinessRuleValidationException>(ex => new BusinessRuleValidationExceptionProblemDetails(ex));
                 x.Map<NotFoundRuleValidationException>(ex => new NotFoundRuleValidationExceptionProblemDetails(ex));
             });
-             
+
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<WorkoutAppDbContext>();
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        _configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    //options.CallbackPath = "/auths/signin-google";
+                });
+
+
 
             services.AddSwaggerGen(c =>
             {
@@ -69,7 +87,7 @@ namespace workout_app.Api
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
-            {
+            { 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });

@@ -13,7 +13,7 @@ namespace workout_app.Infrastructure.Configuration
         {
             builder.HasKey(e => e.Id);
             builder.HasOne(e => e.Exercise)
-                   .WithMany(e => e.Entries);            
+                   .WithMany(e => e.Entries);           
         }
     }
 }
