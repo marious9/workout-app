@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
+using Autofac;
+using FluentValidation;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using workout_app.Api.Helpers;
-using workout_app.Api.IoC;
-using workout_app.Application.Handlers;
+using workout_app.Core.Domain.Helpers;
+using workout_app.Data.IoC;
 
 namespace workout_app.Api
 {
@@ -30,10 +26,6 @@ namespace workout_app.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddInfrastructure(_configuration);
-            services.AddApplication();
-
-            services.AddMediatR(typeof(GetAllExercisesHandler).GetTypeInfo().Assembly);
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
             {
@@ -43,12 +35,26 @@ namespace workout_app.Api
                 builder.AllowCredentials();
             }));
 
+            //services.ConfigureOptions<ProblemDetailsOptionsCustomSetup>();
+
+            services.AddProblemDetails(x =>
+            {
+                x.Map<ValidationException>(ex => new ValidationExceptionProblemDetails(ex));
+                x.Map<BusinessRuleValidationException>(ex => new BusinessRuleValidationExceptionProblemDetails(ex));
+                x.Map<NotFoundRuleValidationException>(ex => new NotFoundRuleValidationExceptionProblemDetails(ex));
+            });
+             
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+        }
 
-            services.AddAutoMapper(typeof(Startup));
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new InfrastructureIoC());
+            builder.RegisterModule(new ApplicationIoC());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,10 +62,9 @@ namespace workout_app.Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseProblemDetails();
             }
-
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseSwagger();
 

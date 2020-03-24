@@ -11,7 +11,7 @@ namespace workout_app.Application.Mapping.Profiles
     {
         public ExerciseProfile()
         {
-            CreateMap<Exercise, ExerciseViewModel>()
+            CreateMap<Exercise, ExerciseDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
         }
     }

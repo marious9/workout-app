@@ -4,7 +4,7 @@ using System.Text;
 
 namespace workout_app.Application.Mapping.Dto.Exercise
 {
-    public class ExerciseViewModel
+    public class ExerciseDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
